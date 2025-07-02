@@ -1,0 +1,1 @@
+The part of the case developed by Kate Dolgova, member of the Silent Guardians team. Includes CNN architecture.
