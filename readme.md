@@ -24,13 +24,13 @@ python -c "import tensorflow as tf; \
 print(f'TensorFlow: {tf.__version__}'); \
 print(f'GPU доступен: {bool(tf.config.list_physical_devices(\"GPU\"))}')"
 *If everything is correct, you will see the output:*
->TensorFlow: 2.19.0
+>TensorFlow: 2.18.0
 >GPU доступен: True
 # Step 5
 *Finally run the diagnostic code:*
 python gpu_test.py
 *Gain the following:*
->TF Version: 2.19.0
+>TF Version: 2.18.0
 >GPU доступен: [PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')]
 *And work on your project*
 
@@ -54,4 +54,19 @@ pip install tensorflow[and-cuda]
 # Step 5
 *In the other way, if tensorflow detected, but works bad, try:*
 pip uninstall -y tensorflow tensorflow-gpu keras tensorflow-cuda # delete tf with buggs
-pip install --no-cache-dir tensorflow[and-cuda]==2.19.0 # install cuda-suitable tf
+pip install --no-cache-dir tensorflow[and-cuda]==2.18.0 # install cuda-suitable tf
+
+# # How to check the GPU memory usage
+*Open another bash here, in the VS Code terminal and type:*
+watch -n 1 nvidia-smi # the number is time frequency of update (seconds)
+OR
+pip install gpustat #only ONCE
+gpustat -i 1 # the number is time frequency of update (seconds)
+*Then look at percentage*
+
+# # Mini-check before every new project
+*In the WSL terminal:*
+cd /mnt/c/Users/Катюша/Desktop/Sber-case-2025
+code .
+*In the VS Code terminal (bash):*                      
+python -c "import tensorflow as tf, numpy as np; print(tf.__version__, tf.test.is_gpu_available())"

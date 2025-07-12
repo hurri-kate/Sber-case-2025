@@ -1,9 +1,6 @@
 import tensorflow as tf
 import numpy as np
 
-# Включаем логирование устройств для проверки
-tf.debugging.set_log_device_placement(True)
-
 # Создаем простую модель
 model = tf.keras.Sequential([
     tf.keras.layers.Dense(100, input_shape=(10,), activation='relu'),
@@ -25,7 +22,7 @@ print("Обучение завершено!")
 gpu_devices = tf.config.list_physical_devices('GPU')
 if gpu_devices:
     print(f"\n✅ Модель выполнена на GPU: {gpu_devices[0].name}")
-    # Дополнительная проверка: где размещены веса модели
-    print(f"Первые веса модели размещены на: {model.weights[0].device}")
+    for w in model.trainable_weights:
+        print(f"Вес: {w.name} -> устройство: {w.handle.device}")
 else:
     print("\n❌ Модель выполнена на CPU")
