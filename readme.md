@@ -1,42 +1,48 @@
-# # # # About the project
-# # This is the part of the case developed by Kate Dolgova (a.k.a. hedgehog), member of the Silent Guardians team in AI-hackathon being held in the MIPT 2-3 July, 2025. Includes architecture of the CNN and RNN created to solve the Sber case.
+#### About the project
+## This is the part of the case developed by **Kate Dolgova** (a.k.a. *hedgehog*), member of the **Silent Guardians** team in *AI-hackathon* being held in the *MIPT 2-3 July, 2025*. 
+## The repository containes architecture of the CNN and RNN created to solve the Sber case.
 
-# At the moment this markdown consists of short description and tensorflow activation guide, but the project will be improved
+# Currently this README contains a short description and a TensorFlow activation guide, although the project will be expanded later.
 
-# # # How to compile the code with TensorFlow in VS Code?
+### How to Compile & Run PyTorch & TensorFlow code in VS Code (WSL)
 
-# # The sequence of actions
+## The sequence of actions
+
 # Step 1
-*In the Ubuntu-24.04 terminal print:*
-cd /mnt/c/Users/Катюша/Desktop/Sber-case-2025 # to open your repository
-code . # to open VS Code in WSL
+In the Ubuntu-24.04 (WSL) terminal print:
+```ruby
+cd /mnt/c/Users/Катюша/Desktop/Sber-case-2025    # to open your repository
+code .                                           # to open VS Code in WSL
+```
 # Step 2
-*Open terminal (push Ctrl+Shift+`) in VS Code (all actions below are being conducted here). Write there the following:*
-python3 -m venv ~/tf_gpu # create virtual environment (DO IT ONLY ONCE: when creating it for the first time)
-source ~/tf_gpu/bin/activate # activate virtual environment (you may SKIP doing this action every time, if modify settings.json)
-pwd # check the path (in exact case it should be "/mnt/c/Users/Катюша/Desktop/Sber-case-2025")
+Open terminal (push **Ctrl+Shift+`**) in VS Code (all actions below are being conducted here). Write there the following:
+```ruby
+python3 -m venv ~/tf_gpu       # create virtual environment (DO IT ONLY ONCE: when creating it for the first time)
+source ~/tf_gpu/bin/activate   # activate virtual environment (you may SKIP doing this action every time, if you modify settings.json)
+pwd                            # check the path (in exact case it should be "/mnt/c/Users/Катюша/Desktop/Sber-case-2025")
+```
 # Step 3
-*Verify being in the right environment:*
-In the left down corner (right below the Account & Settings icons) you should see "WSL:Ubuntu-24.04", in the right down corner (just above the date and time in your Windows 10) - "3.12.3 (tf_gpu)"
+Verify being in the right environment:
+In the lower left corner (right below the Account & Settings icons) you should see "WSL: Ubuntu-24.04", in the lower (for .py) or upper (for .ipynb) right corner - "3.12.3 (tf_gpu)" or "tf_gpu (Python 3.12.3)" (*status-bar*). CLick on the last one and check if "tf_gpu (Python 3.12.3) ~/tf_gpu/bin/python" is currently selected.
 # Step 4
-*Quickly check if something went wrong:*
-python -c "import tensorflow as tf; \
-print(f'TensorFlow: {tf.__version__}'); \
-print(f'GPU доступен: {bool(tf.config.list_physical_devices(\"GPU\"))}')"
-*If everything is correct, you will see the output:*
->TensorFlow: 2.18.0
->GPU доступен: True
-# Step 5
-*Finally run the diagnostic code:*
-python gpu_test.py
-*Gain the following:*
->TF Version: 2.18.0
->GPU доступен: [PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')]
-*And work on your project*
+Finally run the diagnostic scripts:
+```ruby
+python pt_gpu_test.py
+python tf_gpu_test.py
+```
+Expected output:
+```ruby
+PT Version: 2.6.0+cu124            # for your CUDA v12.4
+GPU доступен: True, NVIDIA GeForce GTX 1650
+TF Version: 2.18.0
+GPU доступен: [PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')]
+```
+And work on your project
 
-# # Additional notes
+## Additional notes
 # Step 2
-*To make activation of the environment being automatical, find settings.json (push Ctrl+Shift+P -> type "open settings" -> choose "Preferences: Open User Settings (JSON)"), open and modify it in the certain way: into the main brackets, in the ending, add*
+To make activation of the environment being automatical, find **settings.json** (push Ctrl+Shift+P -> type "open settings" -> choose "Preferences: Open User Settings (JSON)"), open and modify it in the certain way: into the main brackets (exactly in the ending) add
+```ruby
 "terminal.integrated.profiles.linux": {
     "bash": {
       "path": "bash",
@@ -44,29 +50,49 @@ python gpu_test.py
     }
   },
   "terminal.integrated.defaultProfile.linux": "bash"
-*Then save changes and restart the VS Code*
+```
+Then save changes and restart the VS Code
 # Step 3
-*In the case VS Code doesn't see the interpreter, do the following:*
-push Ctrl+Shift+P -> find "Python: Select Interpreter" ->  choose ./tf_gpu/bin/python
+In the case VS Code doesn't see the interpreter, do the following:
+>push Ctrl+Shift+P -> find "Python: Select Interpreter" ->  choose ~/tf_gpu/bin/python
 # Step 4
-*If there is no tensorflow detected, but your environment is ale=ready activated, install it, use the following line only ONCE though:*
-pip install tensorflow[and-cuda]
-# Step 5
-*In the other way, if tensorflow detected, but works bad, try:*
-pip uninstall -y tensorflow tensorflow-gpu keras tensorflow-cuda # delete tf with buggs
-pip install --no-cache-dir tensorflow[and-cuda]==2.18.0 # install cuda-suitable tf
+If there is no PyTorch/Tensorflow detected or your PyTorch/Tensorflow is broken try the following (only ONCE):
+```ruby
+# PyTorch
+pip uninstall -y torch torchvision torchaudio                                                  # delete torch with buggs (the 2nd case - DO, 1st case - SKIP)
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124    # install cuda-suitable torch
+#TensorFlow
+pip uninstall -y tensorflow tensorflow-gpu keras tensorflow-cuda                               # delete tensorflow with buggs (the 2nd case - DO, 1st case - SKIP)
+pip install --no-cache-dir tensorflow[and-cuda]==2.18.0                                        # install cuda-suitable tensorflow
+```
 
-# # How to check the GPU memory usage
-*Open another bash here, in the VS Code terminal and type:*
-watch -n 1 nvidia-smi # the number is time frequency of update (seconds)
+### How to check the GPU memory usage
+Open another bash here (in the VS Code terminal) and type:
+```ruby
+watch -n 1 nvidia-smi  # updates every second
+```
 OR
-pip install gpustat #only ONCE
-gpustat -i 1 # the number is time frequency of update (seconds)
-*Then look at percentage*
+```ruby
+pip install gpustat    # use only ONCE
+gpustat -i 1           # updates evry second
+```
+*Then monitor the percentage, temperature and *
 
-# # Mini-check before every new project
-*In the WSL terminal:*
+### Mini-check before every new session
+In the WSL terminal:
+```ruby
 cd /mnt/c/Users/Катюша/Desktop/Sber-case-2025
 code .
-*In the VS Code terminal (bash):*                      
-python -c "import tensorflow as tf, numpy as np; print(tf.__version__, tf.test.is_gpu_available())"
+```
+In the VS Code terminal (bash, it should be open after the previous step):
+```ruby                      
+source ~/tf_gpu/bin/activate
+python tf_gpu_test.py        # TensorFlow GPU test
+python pt_gpu_test.py        # PyTorch GPU test
+```
+
+### Verified software stack (author’s laptop, GeForce GTX 1650)
+
+| NVIDIA Driver | CUDA     | cuDNN      | Python     | TensorFlow | PyTorch   |
+| ------------- | -------- | ---------- | ---------- | ---------- | --------- |
+| **576.88**    | **12.4** | **9.10.2** | **3.12.3** | **2.18.0** | **2.6.0** |
